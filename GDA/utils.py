@@ -1,6 +1,28 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+def normalize(fd_list):
+    mean = np.mean(fd_list, axis=0)
+    sd = np.std(fd_list, axis=0)
+
+    normal_fd = (fd_list - mean)/sd
+    return normal_fd
+
+def seperate_data(x, y):
+    positive = []
+    negative = []
+    for i,val in enumerate(y):
+        if(val== 1):
+            positive.append(x[i])
+        else:
+            negative.append(x[i])
+    return np.array(positive), np.array(negative)
+
+def gauss(x,y,Sigma,mu):
+    X=np.vstack((x,y)).T
+    mat_multi=np.dot((X-mu[None,...]).dot(np.linalg.inv(Sigma)),(X-mu[None,...]).T)
+    return  np.diag(np.exp(-1*(mat_multi)))
+
 
 def load_dataset(csv_path, label_col='y', add_intercept=False):
     """Load dataset from a CSV file.
